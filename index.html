@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Incident Communication Decision Tree - Updated</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .node {
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 320px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .decision {
+            background-color: #e3f2fd;
+            border-color: #1976d2;
+        }
+        .path-a {
+            background-color: #ffebee;
+            border-color: #d32f2f;
+        }
+        .path-b {
+            background-color: #fff3e0;
+            border-color: #f57c00;
+        }
+        .path-c {
+            background-color: #e8f5e8;
+            border-color: #388e3c;
+        }
+        .path-d {
+            background-color: #f3e5f5;
+            border-color: #7b1fa2;
+        }
+        .path-e {
+            background-color: #f5f5f5;
+            border-color: #616161;
+        }
+        .node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .level {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid;
+            border-radius: 4px;
+        }
+        .timeline-box {
+            background-color: #fff9c4;
+            border: 2px solid #f57f17;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .escalation-triggers {
+            background-color: #fce4ec;
+            border-left: 4px solid #e91e63;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .timing-info {
+            background-color: #e1f5fe;
+            border-left: 4px solid #0288d1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        h3 {
+            color: #333;
+            margin-top: 25px;
+        }
+        .small-text {
+            font-size: 12px;
+            font-weight: normal;
+            margin-top: 8px;
+            color: #666;
+        }
+        .connector {
+            width: 2px;
+            height: 20px;
+            background-color: #666;
+            margin: 0 auto;
+        }
+        .follow-up-arrow {
+            background-color: #4caf50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 10px;
+            display: inline-block;
+        }
+        .timeline-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+        }
+        .timeline-table th, .timeline-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .timeline-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .severity-section {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .path-flow {
+            background-color: #e8f5e8;
+            border: 2px dashed #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IT Incident Communication Decision Tree</h1>
+        <p style="text-align: center; color: #666; font-style: italic;">Updated with 5 Communication Paths (A-E) Including Sequential Options</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-box decision" style="border-color: #1976d2; background-color: #e3f2fd;"></div>
+                <span>Decision Point</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box path-a" style="border-color: #d32f2f; background-color: #ffebee;"></div>
+                <span>Path A: Immediate All-Staff</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box path-b" style="border-color: #f57c00; background-color: #fff3e0;"></div>
+                <span>Path B: AOC → All-Staff</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box path-c" style="border-color: #388e3c; background-color: #e8f5e8;"></div>
+                <span>Path C: All-Staff → AOC</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box path-d" style="border-color: #7b1fa2; background-color: #f3e5f5;"></div>
+                <span>Path D: AOC Only</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-box path-e" style="border-color: #616161; background-color: #f5f5f5;"></div>
+                <span>Path E: No Communication</span>
+            </div>
+        </div>
+
+        <div class="tree">
+            <!-- Starting Point -->
+            <div class="node decision">
+                <strong>INCIDENT IDENTIFIED</strong>
+                <div class="small-text">0-10 min: Get everyone on bridge, page resolver teams, open ServiceNow ticket</div>
+            </div>
+            
+            <div class="connector"></div>
+            
+            <!-- First Decision -->
+            <div class="node decision">
+                <strong>Is this an obvious hospital-wide crisis?</strong>
+                <div class="small-text">Network down, EHR down, patient safety systems, >50% operations affected</div>
+            </div>
+            
+            <div class="connector"></div>
+            
+            <!-- Split Level 1 -->
+            <div class="level">
+                <div class="node path-a">
+                    <strong>PATH A</strong><br>
+                    IMMEDIATE ALL-STAFF ALERT
+                    <div class="small-text">0-30 min: Send alert<br>Staff experiencing issue now<br>Every 30 min: Updates</div>
+                </div>
+                
+                <div class="node decision">
+                    <strong>Do I have solid information & is AOC involvement needed?</strong>
+                    <div class="small-text">Can I communicate responsibly? Will stakeholders benefit? Time for sequential?</div>
+                </div>
+            </div>
+            
+            <div class="connector"></div>
+            
+            <!-- Split Level 2 -->
+            <div class="level">
+                <div class="path-flow">
+                    <div class="follow-up-arrow">Path A Follow-up</div>
+                    <div class="node path-c">
+                        <strong>PATH C</strong><br>
+                        ALL-STAFF → AOC FOLLOW-UP
+                        <div class="small-text">30-60 min after Path A<br>Leadership needs context<br>Dedicated AOC channel</div>
+                    </div>
+                </div>
+                
+                <div class="node path-b">
+                    <strong>PATH B</strong><br>
+                    AOC → ALL-STAFF SEQUENTIAL
+                    <div class="small-text">AOC first (30-45 min)<br>High escalation likelihood<br>Then all-staff if needed</div>
+                </div>
+                
+                <div class="node path-d">
+                    <strong>PATH D</strong><br>
+                    AOC-ONLY COMMUNICATION
+                    <div class="small-text">Leadership awareness<br>No immediate all-staff need<br>Contained impact</div>
+                </div>
+                
+                <div class="node path-e">
+                    <strong>PATH E</strong><br>
+                    NO COMMUNICATION
+                    <div class="small-text">Still diagnosing or quick fix<br>No user impact<br>Backend issues only</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-box">
+            <h3>📅 SIMPLIFIED COMMUNICATION TIMELINE</h3>
+            <table class="timeline-table">
+                <tr>
+                    <th>Time Window</th>
+                    <th>What Happens</th>
+                </tr>
+                <tr>
+                    <td><strong>0-10 min</strong></td>
+                    <td>Get everyone on bridge • Page resolver teams • Open ServiceNow ticket • Turn on transcription • Pre-stage templates</td>
+                </tr>
+                <tr>
+                    <td><strong>10-30 min</strong></td>
+                    <td>Complete initial assessment • Confirm scope and impact • Decide path (A-E) • If Path A: Send IS Notifier All-Staff ALERT</td>
+                </tr>
+                <tr>
+                    <td><strong>>30 min</strong></td>
+                    <td>Continue comms based on path • Path C, B, D, or E actions • Begin update cadence (Critical: 30min, High: 60min, Medium: 2-3hrs)</td>
+                </tr>
+                <tr>
+                    <td><strong>End</strong></td>
+                    <td>Send all clear communications • Official all clear for paths A-D • Path E: no communication needed</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="escalation-triggers">
+            <h3>⬆️ ESCALATION & PATH TRANSITIONS</h3>
+            <ul>
+                <li><strong>Path E → D/B/A:</strong> Issue persists >30 min, scope expands, users start calling, patient safety emerges</li>
+                <li><strong>Path D → B/A:</strong> Multiple departments affected, exceeds 2 hours, patient safety concerns</li>
+                <li><strong>Path B → A:</strong> Impact broader than expected, immediate all-staff action needed</li>
+                <li><strong>Path A → C:</strong> All-staff alerted, now AOC needs additional context and dedicated channel</li>
+            </ul>
+        </div>
+
+        <div class="severity-section">
+            <h3>⏰ UPDATE CADENCE BY INCIDENT SEVERITY LEVEL</h3>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h4>🔴 CRITICAL IMPACT (P1)</h4>
+                    <ul>
+                        <li><strong>Systems:</strong> Patient Safety/EHR/Network/Security</li>
+                        <li><strong>Frequency:</strong> Every 30 minutes</li>
+                        <li><strong>Audience:</strong> All-staff + AOC (Path A → Path C)</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <h4>🟡 HIGH IMPACT</h4>
+                    <ul>
+                        <li><strong>Systems:</strong> Significant Workflow Disruption</li>
+                        <li><strong>Frequency:</strong> Every 60 minutes</li>
+                        <li><strong>Audience:</strong> AOC + departments (Path B sequence)</li>
+                    </ul>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <h4>🟢 MEDIUM IMPACT</h4>
+                    <ul>
+                        <li><strong>Systems:</strong> Limited Impact</li>
+                        <li><strong>Frequency:</strong> Every 2-3 hours</li>
+                        <li><strong>Audience:</strong> AOC only (Path D)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="timing-info">
+            <h3>📋 MESSAGE TEMPLATE REQUIREMENTS</h3>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1;">
+                    <h4>🚨 ALERT Messages:</h4>
+                    <ul>
+                        <li>What system/service is affected</li>
+                        <li>Impacted Users or Location</li>
+                        <li>What to Know (impact on workflows)</li>
+                        <li>What is Next (next communication time)</li>
+                    </ul>
+                </div>
+                <div style="flex: 1;">
+                    <h4>🔄 UPDATE Messages:</h4>
+                    <ul>
+                        <li>What system/service is affected</li>
+                        <li>Impacted Users or Location</li>
+                        <li>Update (progress since last communication)</li>
+                        <li>What to Do (new workarounds)</li>
+                        <li>What is Next (next update time)</li>
+                    </ul>
+                </div>
+                <div style="flex: 1;">
+                    <h4>✅ ALL CLEAR Messages:</h4>
+                    <ul>
+                        <li>What system/service is affected</li>
+                        <li>Impacted Users or Location</li>
+                        <li>What to Know (service restored)</li>
+                        <li>What to Do (precautions/contacts)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-box">
+            <strong>🔄 CONTINUOUS REASSESSMENT</strong><br>
+            <strong>Key Decision Questions:</strong> Has scope/impact changed? • Do I have new information? • Taking longer than expected? • Patient safety considerations changed?<br>
+            <strong>Review Frequency:</strong> Every 30-60 minutes during active incident
+        </div>
+    </div>
+
+    <script>
+        // Add interactive hover effects and click information
+        document.querySelectorAll('.node').forEach(node => {
+            node.addEventListener('click', function() {
+                const nodeType = this.className.includes('path-a') ? 'Path A: Immediate All-Staff (Hospital needs to know right now)' :
+                               this.className.includes('path-b') ? 'Path B: AOC → All-Staff Sequential (Leadership first, then decide about everyone)' :
+                               this.className.includes('path-c') ? 'Path C: All-Staff → AOC Follow-up (Staff alerted, now leadership needs context)' :
+                               this.className.includes('path-d') ? 'Path D: AOC-Only (Leadership needs to know, staff don\'t need to act)' :
+                               this.className.includes('path-e') ? 'Path E: No Communication (Solve quietly and efficiently)' :
+                               'Decision Point';
+                
+                alert(`Selected: ${nodeType}\n\nRemember: You can reassess and change paths as the situation evolves!\n\nPath C is a follow-up to Path A when AOC needs additional context.`);
+            });
+        });
+    </script>
+</body>
+</html>
